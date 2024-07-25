@@ -22,4 +22,23 @@ public class BulletSprict : MonoBehaviour
     {
         
     }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if(other.gameObject.tag=="Enemy")
+        {
+            //ゲームマネージャーのスプリクトを獲得
+            GameObject gameManager;
+            GameManagerSprict gameManagerScript;
+            gameManager = GameObject.Find("GameManager");
+            gameManagerScript = gameManager.GetComponent<GameManagerSprict>();
+
+            //ゲームマネージャースクリプトの衝突判定を呼び出す
+            gameManagerScript.Hit(transform.position);
+
+            Destroy(other.gameObject);
+            Destroy(this.gameObject);
+        }
+       
+    }
 }

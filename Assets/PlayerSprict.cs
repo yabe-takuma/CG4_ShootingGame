@@ -7,12 +7,15 @@ public class PlayerSprict : MonoBehaviour
     public Rigidbody rb;
     public Animator animator;
     public GameObject bullet;
+    public GameObject gameManager;
+    private GameManagerSprict gameManagerScript;
 
     int bulletTimer = 0;
     // Start is called before the first frame update
     void Start()
     {
-       
+        //Scriptを取得する
+        gameManagerScript = gameManager.GetComponent<GameManagerSprict>();
     }
 
     // Update is called once per frame
@@ -47,12 +50,20 @@ public class PlayerSprict : MonoBehaviour
             animator.SetBool("mode", false);
             animator.SetBool("leftmode", false);
         }
+        if(gameManagerScript.IsGameOver()==true)
+        {
+            rb.velocity = new Vector3(0, 0, 0);
+            return;
+        }
     }
 
     void FixedUpdate()
     {
-       
 
+        if (gameManagerScript.IsGameOver() == true)
+        {
+            return;
+        }
         //弾発射
         if (bulletTimer == 0)
         {
@@ -71,6 +82,15 @@ public class PlayerSprict : MonoBehaviour
             {
                 bulletTimer = 0;
             }
+        }
+      
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if(other.gameObject.tag=="Enemy")
+        {
+            gameManagerScript.GameOverStart();
         }
     }
 }
